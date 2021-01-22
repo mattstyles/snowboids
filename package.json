@@ -1,0 +1,30 @@
+{
+  "name": "snowboids",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node scripts/dev.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "chokidar": "^3.5.1",
+    "cpy": "^8.1.1",
+    "esbuild": "^0.8.34",
+    "live-server": "^1.2.1",
+    "minimist": "^1.2.5"
+  },
+  "dependencies": {
+    "@raid-ui/theme": "^0.20.0",
+    "@raid/app-kit": "^0.20.0",
+    "@raid/kit": "^0.20.0",
+    "pixi.js": "^5.3.7",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "styled-components": "^5.2.1",
+    "valtio": "^0.6.2"
+  }
+}
