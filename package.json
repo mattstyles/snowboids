@@ -21,6 +21,7 @@
     "@raid-ui/theme": "^0.20.0",
     "@raid/app-kit": "^0.20.0",
     "@raid/kit": "^0.20.0",
+    "canvas-fit": "^1.5.0",
     "pixi.js": "^5.3.7",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",

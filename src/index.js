@@ -1,23 +1,49 @@
 
 import { render } from 'react-dom'
-import { ThemeProvider } from 'styled-components'
-import { theme } from '@raid-ui/theme'
-import { Box } from '@raid/kit'
+import { Card, Screen, Button, Stack, Text } from '@raid/kit'
+import { useProxy } from 'valtio'
 
-var el = document.createElement('div')
-document.body.appendChild(el)
+import { App } from './ui/app'
+import { Absolute } from './ui/absolute'
+import { Simulation } from './main/simulation'
+import { appState } from './core/main'
 
-console.log('doing some stuff')
+const el = document.getElementById('root')
 
-const App = () => {
+const Gui = () => {
+  const view = useProxy(appState)
+
+  const add = () => {
+    appState.count = appState.count + 1
+  }
+
   return (
-    <ThemeProvider theme={theme}>
-      <Box p={4} sx={{ border: '1px solid rgba(0,0,0,0.2)' }}>Hello world</Box>
-    </ThemeProvider>
+    <Absolute m={2} zIndex={1}>
+      <Card>
+        <Stack>
+          <Text>Stage: {view.stage}</Text>
+          <Text>Count: {view.count}</Text>
+          <Button onClick={add}>Add</Button>
+        </Stack>
+      </Card>
+    </Absolute>
+  )
+}
+
+const Boids = () => {
+  const view = useProxy(appState)
+
+  return (
+    <App>
+      <Screen>
+        <Gui />
+        <Simulation stage={view.stage} />
+      </Screen>
+    </App>
   )
 }
 
 render(
-  <App />,
+  <Boids />,
   el
 )
