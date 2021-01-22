@@ -23,7 +23,8 @@ const run = async () => {
     outfile: './dist/index.js',
     bundle: true,
     loader: {
-      '.js': 'jsx'
+      '.js': 'jsx',
+      '.png': 'dataurl'
     },
     inject: [
       './scripts/react-shim.js'
