@@ -2,11 +2,6 @@
 export class Boid {
   constructor (sprite) {
     this.sprite = sprite
-
-    this.sprite.position.set(
-      Math.random() * 100,
-      Math.random() * 100
-    )
     this.sprite.scale.set(0.1, 0.1)
   }
 

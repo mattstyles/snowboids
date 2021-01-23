@@ -1,14 +1,13 @@
 
 import React, { useRef, useEffect } from 'react'
-import { Application, Sprite } from 'pixi.js'
-import { SpritePool } from 'pixi-spritepool'
+import { Application } from 'pixi.js'
 // import { Camera } from 'pixi-holga'
 import fit from 'canvas-fit'
 import { ref } from 'valtio'
 
-import { texture } from './texture'
-import { Boid } from './boid'
 import { sim } from './state'
+import { init } from './init'
+import { update } from './update'
 
 const mountApplication = ({ canvas }) => {
   const resolution = window.devicePixelRatio || 1
@@ -21,9 +20,12 @@ const mountApplication = ({ canvas }) => {
     view: canvas
   })
 
+  sim.worldSize = [0, 0, app.renderer.screen.width, app.renderer.screen.height]
+
   const onWindowResize = () => {
     resize()
     app.renderer.resize(canvas.width, canvas.height)
+    sim.worldSize = [0, 0, app.renderer.screen.width, app.renderer.screen.height]
   }
 
   window.addEventListener('resize', onWindowResize, false)
@@ -32,50 +34,12 @@ const mountApplication = ({ canvas }) => {
     window.removeEventListener('resize', onWindowResize, false)
   }
 
+  window.app = app
+
   return {
     app,
     dispose
   }
-}
-
-const initSimulation = ({
-  app
-}) => {
-  const onCreateSprite = () => {
-    const sprite = new Sprite(texture)
-    sprite.anchor.x = 0.5
-    sprite.anchor.y = 0.5
-    sprite.scale.set(0.25, 0.25)
-    return sprite
-  }
-
-  const pool = SpritePool.of({
-    length: 100,
-    container: app.stage,
-    onCreateItem: onCreateSprite
-  })
-
-  const boids = SpritePool.of({
-    length: 100,
-    onCreateItem: (_, index) => {
-      const sprite = pool.get(index)
-      const boid = new Boid(sprite)
-      boid.sprite.visible = true
-      return boid
-    }
-  })
-
-  sim.pool = ref(pool)
-  sim.boids = ref(boids)
-  sim.numBoids = sim.boids.length
-
-  app.ticker.add(render)
-}
-
-const render = () => {
-  sim.boids.each(boid => {
-    boid.update()
-  })
 }
 
 // effects
@@ -90,13 +54,16 @@ const startSimulation = ({
     sim.app = ref(application.app)
     sim.stage = ref(application.app.stage)
 
-    initSimulation({
+    init({
       app: application.app
     })
+
+    const updateTicker = application.app.ticker.add(update)
 
     // dispose
     return () => {
       application.dispose()
+      updateTicker.destroy()
     }
   }
 }

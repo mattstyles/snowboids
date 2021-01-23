@@ -6,5 +6,6 @@ export const sim = proxy({
   stage: null,
   pool: null,
   boids: null,
-  numBoids: null
+  numBoids: null,
+  worldSize: [0, 0, 500, 500]
 })
