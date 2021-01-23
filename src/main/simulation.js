@@ -7,7 +7,6 @@ import { ref } from 'valtio'
 
 import { sim } from './state'
 import { init } from './init'
-import { update } from './update'
 
 const mountApplication = ({ canvas }) => {
   const resolution = window.devicePixelRatio || 1
@@ -58,12 +57,19 @@ const startSimulation = ({
       app: application.app
     })
 
-    const updateTicker = application.app.ticker.add(update)
+    const engine = sim.engine
+
+    const updateTicker = application.app.ticker.add(engine.update)
+    const renderTicker = application.app.ticker.add(engine.render)
+
+    // Run update loop less frequently
+    // updateTicker.maxFPS = 8
 
     // dispose
     return () => {
       application.dispose()
       updateTicker.destroy()
+      renderTicker.destroy()
     }
   }
 }
